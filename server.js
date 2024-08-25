@@ -4,7 +4,7 @@ const Mailgun = require("mailgun.js");
 const path = require("path");
 const cors = require("cors");
 const app = express();
-const port = 3004;
+const port = 3012;
 
 require("dotenv").config();
 
@@ -20,8 +20,9 @@ const mg = mailgun.client({
 });
 
 function sendWelcomeEmail(email) {
+  console.log("sendWelcomeEmail function called with email:", email);
   const data = {
-    from: "Excited User <mailgun@sandboxb2707bfe268e4b16bb5498260dcc8ec8.mailgun.org>",
+    from: `Excited User <mailgun@${process.env.MAILGUN_DOMAIN}>`,
     to: email,
     subject: "Welcome to DEV@Deakin!",
     text: "Welcome to DEV@Deakin.",
@@ -31,7 +32,7 @@ function sendWelcomeEmail(email) {
   mg.messages
     .create(process.env.MAILGUN_DOMAIN, data)
     .then((body) => {
-      console.log("Email sent:", body);
+      console.log("Email sent successfully:", body);
     })
     .catch((error) => {
       console.error("Error sending email:", error);
@@ -44,6 +45,7 @@ app.get("/", (req, res) => {
 
 app.post("/subscribe", (req, res) => {
   const email = req.body.email;
+  console.log("Received subscription request for email:", email);
   sendWelcomeEmail(email);
   res.send("Welcome email sent to " + email + "!");
 });

@@ -7,8 +7,10 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:3012";
+
     try {
-      const response = await axios.post("http://localhost:3004/subscribe", {
+      const response = await axios.post(`${apiUrl}/subscribe`, {
         email,
       });
       alert(response.data);
@@ -51,7 +53,7 @@ const SignUp = () => {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-          <Button type="submit" primary style={{ marginLeft: "10px" }}>
+          <Button type="submit" color="grey" style={{ marginLeft: "10px" }}>
             Subscribe
           </Button>
         </form>
